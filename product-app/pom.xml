@@ -16,6 +16,7 @@
   <modules>
     <module>discovery-server</module>
     <module>api-gateway</module>
+    <module>product-data-access</module>
   </modules>
 
   <name>product-app</name>
@@ -33,17 +34,28 @@
       <dependency>
       <groupId>com.niall</groupId>
         <artifactId>discovery-server</artifactId>
-        <version>${parent.version}</version>
+        <version>${project.parent.version}</version>
       </dependency>
       <dependency>
       <groupId>com.niall</groupId>
         <artifactId>api-gateway</artifactId>
-        <version>${parent.version}</version>
+        <version>${project.parent.version}</version>
+      </dependency>
+      <dependency>
+      <groupId>com.niall</groupId>
+        <artifactId>product-data-access</artifactId>
+        <version>${project.parent.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
+        <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-docker-compose</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
    <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-devtools</artifactId>
