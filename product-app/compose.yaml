@@ -2,14 +2,18 @@ services:
   axon-server:
     image: 'axoniq/axonserver:2024.2.3-jdk-17-nonroot'
     container_name: 'axon-server'
+    hostname: 'axon-server'
     depends_on:
       - database
     restart: 'unless-stopped'
     ports:
       - "8024:8024"
       - "8124:8124"
+    environment:      
+    - AXONSERVER_HOSTNAME=axon-server
     networks:
       - app-network
+ 
   database:
     image: mysql:latest
     restart: unless-stopped
@@ -25,10 +29,12 @@ services:
       - db-data:/var/lib/mysql
     networks:
       - app-network
+ 
   phpmyadmin:
     depends_on:
       - database
     image: phpmyadmin/phpmyadmin
+    platform: linux/amd64
     restart: unless-stopped
     env_file: .env
     ports:
@@ -38,6 +44,7 @@ services:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
     networks:
       - app-network
+ 
   kafka-1:
     image: bitnami/kafka:latest
     container_name: kafka-1
@@ -58,7 +65,7 @@ services:
       - kafka1-data:/bitnami/kafka
     networks:
       - app-network
-
+ 
   kafka-2:
     image: bitnami/kafka:latest
     container_name: kafka-2
@@ -79,22 +86,25 @@ services:
       - kafka2-data:/bitnami/kafka
     networks:
       - app-network
+ 
   mongo:
     image: mongo:latest
-    container_name: mongodb
+    hostname: mongodb
     restart: always
     ports:
       - 27017:27017
     volumes:
       - mongodb:/data/db
     environment:
-      - MONGO_INITDB_ROOT_USERNAME="${MONGO_INITDB_ROOT_USERNAME}""
-      - MONGO_INITDB_ROOT_PASSWORD="${MONGO_INITDB_ROOT_PASSWORD}""
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     networks:
       - app-network
+ 
 networks:
   app-network:
     driver: bridge
+ 
 volumes:
   db-data:
   mongodb:
